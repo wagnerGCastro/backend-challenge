@@ -1,0 +1,444 @@
+{
+	"id": "87505ecb-266f-31e4-3720-2f1d43280fea",
+	"name": "API Produto",
+	"description": "",
+	"order": [
+		"0a61670d-ee73-b43d-3893-d94cfc8a2133",
+		"940e1b14-aafa-8b21-48aa-64e351dba676",
+		"27944b13-3660-0cd4-0323-b79f48d0e769",
+		"32f15347-9a5c-2316-c82b-3c54007b16f5",
+		"3486f0f1-9559-55cc-05f2-c507c8d693c1",
+		"2c02ff09-0603-229c-374f-457956f1e549",
+		"1f34fe78-1110-5a35-0dc6-50cb7fa03457",
+		"7850b3ad-2d29-b7f2-c774-19fc63dbdaf1",
+		"87d911fe-bf31-f266-fe59-3f5076a25731"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1580491980265,
+	"owner": "10230245",
+	"public": false,
+	"requests": [
+		{
+			"id": "0a61670d-ee73-b43d-3893-d94cfc8a2133",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/auth/register",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "name",
+					"value": "username",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "email",
+					"value": "teste@email.com",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "123456",
+					"description": ""
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "http://127.0.0.1:8007/api/auth/register",
+			"description": "Registar novo usuário",
+			"descriptionFormat": "html",
+			"time": 1580491988609,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "1f34fe78-1110-5a35-0dc6-50cb7fa03457",
+			"headers": "//Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": false
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/v1/product",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "name",
+					"value": "camiseta",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "price",
+					"value": "22.70",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "description",
+					"value": "camiseta polo",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_variation",
+					"value": "Y",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_name",
+					"value": "branca",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_hexa",
+					"value": "#FFFFFFFF",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "http://127.0.0.1:8007/api/v1/product",
+			"description": "Cria um novo produto",
+			"descriptionFormat": "html",
+			"time": 1580492236368,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "27944b13-3660-0cd4-0323-b79f48d0e769",
+			"headers": "",
+			"headerData": [],
+			"url": "http://127.0.0.1:8007/api/auth/logout",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": null,
+			"dataMode": "params",
+			"name": "http://127.0.0.1:8007/api/auth/logout",
+			"description": "Logout API",
+			"descriptionFormat": "html",
+			"time": 1580492052550,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "2c02ff09-0603-229c-374f-457956f1e549",
+			"headers": "//Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": false
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/v1/product/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "name",
+					"value": "wagner",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "description",
+					"value": "ertrtrettrtrt",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "http://127.0.0.1:8007/api/v1/product/1",
+			"description": "Busca um produto pelo ID",
+			"descriptionFormat": "html",
+			"time": 1580492201462,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "32f15347-9a5c-2316-c82b-3c54007b16f5",
+			"headers": "Content-Type: application/x-www-form-urlencoded\nAuthorization: Basic Og==\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic Og==",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/v1/user",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "email",
+					"value": "wagner_gcastro@hotmail.com",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "123456",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "http://127.0.0.1:8007/api/v1/user",
+			"description": "Busca todos oso usuários",
+			"descriptionFormat": "html",
+			"time": 1580492162884,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "3486f0f1-9559-55cc-05f2-c507c8d693c1",
+			"headers": "//Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": false
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/v1/product",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "name",
+					"value": "wagner",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "description",
+					"value": "ertrtrettrtrt",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "http://127.0.0.1:8007/api/v1/product",
+			"description": "Busaca todo so produtos cadastrados",
+			"descriptionFormat": "html",
+			"time": 1580492183271,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "7850b3ad-2d29-b7f2-c774-19fc63dbdaf1",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://127.0.0.1:8007/api/v1/product/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "PUT",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "name",
+					"value": "produto atualziado",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "price",
+					"value": "25.98",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "description",
+					"value": "atualziado",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_variation",
+					"value": "N",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_name",
+					"value": "branca",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "color_hexa",
+					"value": "#FFFFFFFF",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "http://127.0.0.1:8007/api/v1/product/1",
+			"description": "Atualiza um produto pelo ID",
+			"descriptionFormat": "html",
+			"time": 1580492258575,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "87d911fe-bf31-f266-fe59-3f5076a25731",
+			"headers": "",
+			"headerData": [],
+			"url": "http://127.0.0.1:8007/api/v1/product/1",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "DELETE",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": null,
+			"dataMode": "params",
+			"name": "http://127.0.0.1:8007/api/v1/product/1",
+			"description": "Deleta um produto pelo ID",
+			"descriptionFormat": "html",
+			"time": 1580492272847,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "940e1b14-aafa-8b21-48aa-64e351dba676",
+			"headers": "",
+			"headerData": [],
+			"url": "http://127.0.0.1:8007/api/auth/login",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "87505ecb-266f-31e4-3720-2f1d43280fea",
+			"data": [
+				{
+					"key": "email",
+					"value": "teste@email.com",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "123456",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"name": "http://127.0.0.1:8007/api/auth/login",
+			"description": "Login API",
+			"descriptionFormat": "html",
+			"time": 1580492040065,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		}
+	]
+}

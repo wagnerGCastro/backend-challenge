@@ -1,35 +1,107 @@
-# Teste Programador PHP Back-end Pleno
+# API Produto
 
-Este teste tem como objetivo conhecer um pouco mais como você programa, e como você vai se organizar para montar um pequeno sistema de produtos com **variações de cores**.
+Esta API tem a finalidade fazer cadastros de produto com operações de criar, deletar, atualizar e exibir, com usuários cadastrados e autenticado com JWT (Json Web Token) para que possam acessar rotas autorizadas, utlizando o framework Laravel como aplicação servidor.
 
-## O que você precisa fazer
+## Instalação
 
-Você precisa criar uma API utilizando Laravel ou Lumen, contendo os seguintes end-points/rotinas abaixo:
+Via Composer
 
-- Cadastro de usuários
-- Autenticação utilizando JWT
-- Produtos com variação (restrição para somente usuário autenticado)
-  - Listar
-  - Cadastrar
-  - Atualizar
-  - Deletar
+``` bash
+$ composer install
+```
 
-Obs 1: é importante lembrar que em todas essas operações de produtos acima **você precisa considerar as variações de cores**, mas também deixar flexivel para decidir se eu quero ou não por uma variação.
+Via npm
 
-Obs 2: de preferência em utilizar o banco de dados MySQL para que seja fácil nossa analise, e também por que é o que utilizamos aqui.
+``` bash
+$ npm install
+```
+## Iniciar o Projeto
 
-Obs 3: não esqueça de criar um README.md explicando oque precisamos fazer para rodar sua aplicação aqui em nossa máquina.
+1-) Configurar banco de dados no arquivo .env na raiz do projeto, conforme as configurações do seu bando de dados.
 
-## Seria legal se você fizesse
+#### 
+``` txt
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=api_laravel
+DB_USERNAME=username
+DB_PASSWORD=password
+```
+2 -) Criar as tabelas no banco de dados
 
-- TDD
+#### 
+``` txt
+  $ php artisan migrate
+```
 
-## No mais...
 
-Se você tiver alguma dúvida, entrar em contato com graziani@vendala.com.br.
+3 -) Precisa gerar uma chave secreta JWT, digite no terminal o comando abaixo. 
 
-Ao finalizar o teste, subir em um reposítorio privado, adicionar como colaborador o usuário @vitorleonel e mandar o link para graziani@vendala.com.br ou como mensagem no Programathor, caso você se candidatou por lá.
+#### 
+``` txt
+  $ php artisan jwt:secret
+```
 
----
 
-Boa sorte! Esperamos ter você aqui com a gente :)
+4-) Configurar banco de dados no arquivo .env na raiz do proejeto, conforme as configurações do seu bando de dados.
+
+#### 
+``` txt
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=api_laravel
+DB_USERNAME=username
+DB_PASSWORD=password
+```
+5 -) Criar as tabelas no banco de dados
+
+#### 
+``` txt
+  $ php artisan migrate
+```
+
+6 -) Precisa gerar uma chave secreta JWT, digite no terminal o comando abaixo. 
+
+#### 
+``` txt
+  $ php artisan jwt:secret
+```
+
+Após ter gerado a chave, aparecerá no arquivo .env uma chave semelhante a esta:
+
+#### 
+``` txt
+  JWT_SECRET=vhhVxo0AVyN1vdYsqpzjUVM7hzNqj7GOosROEUmizQVsNKzL
+```
+
+7 -) Agora já é possível testar a API, veja as rotas abaixo:
+
+#### 
+``` txt
+  // Rotas públicas
+  http://localhost/api/auth/register       - POST,    Registrar novo usuário
+  http://localhost/api/auth/login          - POST,    Login para gerar token
+
+  // Rotas privadas
+  http://localhost/api/auth/logout         - GET,     Deslogar 
+  http://localhost/api/v1/product          - GET,     Buscas todos produtos
+  http://localhost/api/v1/product/{id}     - GET,     Busca um produto pelo seu ID.
+  http://localhost/api/v1/product          - POST,    Cria um novo produto
+  http://localhost/api/v1/product/{id}     - PUT,     Atualiza um produto
+  http://localhost/api/v1/product/{id}     - DELETE,  DELETA um produto
+
+  http://localhost/api/v1/user             - GET,     Buscas todos os usuários
+```
+
+Para realizar as operaçoes de Rotas privadas o usuário precisa enviar o token JWT, que não esteja expirado, se estiver expirado precisa novamente fazer login e gerar novo token.
+
+
+## Documentação
+
+Para mais informações e detalhes de como usar esta API veja o manual completo em html, junto com 2 arquivos .json de exportação de 2 dos maiores programas para testar API (postman e insomnia), localizados na raiz do projeto na pasta 'documentation_api'.
+
+![alt text](https://github.com/wagnerGCastro/backend-challenge/blob/feature/06/documentation_api/1-manual.png)
+
+![alt text](https://github.com/wagnerGCastro/backend-challenge/blob/feature/06/documentation_api/2-manual.png)
