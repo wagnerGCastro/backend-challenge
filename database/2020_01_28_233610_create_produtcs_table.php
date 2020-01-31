@@ -15,7 +15,7 @@ class CreateProdutcsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 120);
+            $table->string('name', 120)->unique();
             $table->float('price');
             $table->string('description', 255);
             $table->enum('color_variation', ['Y','N'])->default('N')->comment('Y: yes, N: no');

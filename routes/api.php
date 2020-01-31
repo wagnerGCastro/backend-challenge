@@ -22,7 +22,15 @@ Route::post('auth/login', 'Api\AuthController@login')->name('auth.login');
 
 Route::group(['middleware' => ['apiJwt']], function() {
     Route::post('auth/logout', 'Api\AuthController@logout')->name('auth.logout');
-    Route::get('v1/users', 'Api\UserController@index')->name('user.index');
+
+    // User
+    Route::get('v1/user', 'Api\UserController@index')->name('user.index');
+
+    // Product
+    Route::get('v1/product', 'Api\ProductController@index')->name('product.index');
+    Route::post('v1/product', 'Api\ProductController@store')->name('product.store');
+    Route::get('v1/product/{id}', 'Api\ProductController@show')->name('product.show');
+    Route::put('v1/product/{id}', 'Api\ProductController@update')->name('product.update');
+    Route::delete('v1/product/{id}', 'Api\ProductController@destroy')->name('product.destroy');
+
 });
-
-
