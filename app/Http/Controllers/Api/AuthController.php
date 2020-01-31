@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
+use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -71,5 +73,40 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
+    }
+
+    /**
+     * Registrar user
+     *
+     * @return  \Illuminate\Http\Request  $request
+     */
+    public function register(Request $request)
+    {
+        // Rules 
+        $rules = [
+            'name'        => 'required|min:2|max:120',
+            'email'       => 'required|min:2|max:120||unique:users',
+            'password'    => 'required|min:6|max:8',
+        ];
+    
+        // Validator
+        $validator = Validator::make($request->all() , $rules);
+
+        if ($validator->fails()) {
+            return response()->json(formatMessage(404, $validator->messages()), 404);
+            die;
+        }
+
+        // Create User
+        $user = User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => $request->password,
+         ]);
+
+        $token = auth()->login($user);
+
+        // return $this->respondWithToken($token));
+        return response()->json(formatMessage(201, $this->respondWithToken($token)), 201);
     }
 }
