@@ -21,7 +21,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "App\\Models\\": "app/Models/"
         },
         "files": [
             "app/Helpers/functions.php"

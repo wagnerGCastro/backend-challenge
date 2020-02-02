@@ -88,8 +88,8 @@ if(!function_exists('formatMessage')) {
      * @return array
      *
      */
-    function formatMessage($code, $message)
+    function formatMessage($code, $message, $titleMessage = 'message')
     {
-        return ['code' => $code, 'message'=> $message];
+        return ['code' => $code, $titleMessage => $message];
     }
 }
