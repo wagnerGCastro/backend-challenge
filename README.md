@@ -76,7 +76,15 @@ Após ter gerado a chave, aparecerá no arquivo .env uma chave semelhante a esta
   JWT_SECRET=vhhVxo0AVyN1vdYsqpzjUVM7hzNqj7GOosROEUmizQVsNKzL
 ```
 
-7 -) Agora já é possível testar a API, veja as rotas abaixo:
+7 -) Subir o servidor 
+
+#### 
+``` txt
+  $ php artisan serve
+```
+
+
+8 -) Agora já é possível testar a API, veja as rotas abaixo:
 
 #### 
 ``` txt
@@ -86,16 +94,16 @@ Após ter gerado a chave, aparecerá no arquivo .env uma chave semelhante a esta
 
   // Rotas privadas
   http://localhost/api/auth/logout         - GET,     Deslogar 
-  http://localhost/api/v1/product          - GET,     Buscas todos produtos
+  http://localhost/api/v1/product          - GET,     Busca todos produtos
   http://localhost/api/v1/product/{id}     - GET,     Busca um produto pelo seu ID.
   http://localhost/api/v1/product          - POST,    Cria um novo produto
-  http://localhost/api/v1/product/{id}     - PUT,     Atualiza um produto
-  http://localhost/api/v1/product/{id}     - DELETE,  DELETA um produto
+  http://localhost/api/v1/product/{id}     - PUT,     Atualiza um produto pelo seu ID.
+  http://localhost/api/v1/product/{id}     - DELETE,  Deleta um produto pelo seu ID.
 
-  http://localhost/api/v1/user             - GET,     Buscas todos os usuários
+  http://localhost/api/v1/user             - GET,     Busca todos os usuários
 ```
 
-Para realizar as operaçoes de Rotas privadas o usuário precisa enviar o token JWT, que não esteja expirado, se estiver expirado precisa novamente fazer login e gerar novo token.
+Para realizar as operaçoes de Rotas privadas o usuário precisa enviar o token JWT, que não esteja expirado, caso contrário precisa novamente fazer login e gerar novo token.
 
 
 ## Documentação
