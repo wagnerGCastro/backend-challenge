@@ -46,7 +46,7 @@ class AuthController extends Controller
     {
         auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(formatMessage(200, 'Successfully logged out'), 200);
     }
 
     /**
@@ -93,7 +93,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all() , $rules);
 
         if ($validator->fails()) {
-            return response()->json(formatMessage(404, $validator->messages()), 404);
+            return response()->json(formatMessage(400, $validator->messages()), 400);
             die;
         }
 
@@ -107,6 +107,6 @@ class AuthController extends Controller
         $token = auth()->login($user);
 
         // return $this->respondWithToken($token));
-        return response()->json(formatMessage(201, $this->respondWithToken($token)), 201);
+        return response()->json(formatMessage(201, 'User was created successfully'), 201);
     }
 }
