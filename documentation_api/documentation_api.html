@@ -558,7 +558,6 @@ pre code.sample-request-response-json {
 
 .sidenav > li.nav-header > a:hover {
     background-color: #4c8eca;
-
 }
 
 .sidenav > li.nav-header.active > a {
@@ -566,6 +565,8 @@ pre code.sample-request-response-json {
   color: #fff;
 }
 
+
+00427D
 
 .sidenav > .active > a {
   position: relative;
@@ -743,7 +744,8 @@ margin-bottom: 20px;
     },
     "name" : {
       "type" : "string",
-      "format" : ""
+      "format" : "",
+      "example" : "senhadousuario"
     },
     "price" : {
       "type" : "number",
@@ -760,27 +762,30 @@ margin-bottom: 20px;
     }
   }
 };
-        defs["Product+ProdColors"] = {
+        defs["ProductProdColors"] = {
   "type" : "object",
   "properties" : {
-    "id" : {
+    "id_products" : {
       "type" : "integer",
       "format" : ""
     },
-    "id_products" : {
+    "id_prodcolors" : {
       "type" : "integer"
     },
     "name" : {
       "type" : "string",
-      "format" : ""
+      "format" : "",
+      "example" : "Sapato Mule"
     },
     "price" : {
       "type" : "number",
-      "format" : "float"
+      "format" : "float",
+      "example" : 28.25
     },
     "description" : {
       "type" : "string",
-      "format" : ""
+      "format" : "",
+      "example" : "Sapato Mule Innovativi Couro Veneto"
     },
     "color_variation" : {
       "type" : "string",
@@ -790,11 +795,52 @@ margin-bottom: 20px;
     },
     "color_hexa" : {
       "type" : "string",
-      "format" : ""
+      "format" : "",
+      "example" : "#00000000"
     },
     "color_name" : {
       "type" : "string",
-      "format" : ""
+      "format" : "",
+      "example" : "preto"
+    }
+  }
+};
+        defs["ProductProdColorsUpdate"] = {
+  "type" : "object",
+  "properties" : {
+    "id_prodcolors" : {
+      "type" : "integer"
+    },
+    "name" : {
+      "type" : "string",
+      "format" : "",
+      "example" : "Sapato Mule"
+    },
+    "price" : {
+      "type" : "number",
+      "format" : "float",
+      "example" : 28.25
+    },
+    "description" : {
+      "type" : "string",
+      "format" : "",
+      "example" : "Sapato Mule Innovativi Couro Veneto"
+    },
+    "color_variation" : {
+      "type" : "string",
+      "example" : "N",
+      "description" : "Product color variation",
+      "enum" : [ "Y", "N" ]
+    },
+    "color_hexa" : {
+      "type" : "string",
+      "format" : "",
+      "example" : "null"
+    },
+    "color_name" : {
+      "type" : "string",
+      "format" : "",
+      "example" : "null"
     }
   }
 };
@@ -813,6 +859,52 @@ margin-bottom: 20px;
     "password" : {
       "type" : "string",
       "example" : "senhadousuario"
+    }
+  }
+};
+        defs["Response"] = {
+  "type" : "object",
+  "required" : [ "code", "message" ],
+  "properties" : {
+    "code" : {
+      "type" : "integer",
+      "description" : "The error code."
+    },
+    "message" : {
+      "type" : "string",
+      "description" : ""
+    }
+  },
+  "title" : "The error response."
+};
+        defs["SuccesResponseLogin"] = {
+  "type" : "object",
+  "required" : [ "access_token", "expires_in", "token_type" ],
+  "properties" : {
+    "access_token" : {
+      "type" : "string",
+      "example" : "eyJ0eXAiOiJKV1QiLCJhbGci",
+      "description" : ""
+    },
+    "token_type" : {
+      "type" : "string",
+      "example" : "bearer",
+      "description" : ""
+    },
+    "expires_in" : {
+      "type" : "integer",
+      "example" : 3600,
+      "description" : "."
+    }
+  },
+  "title" : "Success response."
+};
+        defs["Unauthorized"] = {
+  "type" : "object",
+  "properties" : {
+    "error" : {
+      "type" : "string",
+      "example" : "Unauthorized"
     }
   }
 };
@@ -859,6 +951,9 @@ margin-bottom: 20px;
                     <li data-group="Product" data-name="getProduct" class="">
                       <a href="#api-Product-getProduct">getProduct</a>
                     </li>
+                    <li data-group="Product" data-name="getProductId" class="">
+                      <a href="#api-Product-getProductId">getProductId</a>
+                    </li>
                     <li data-group="Product" data-name="productIdDelete" class="">
                       <a href="#api-Product-productIdDelete">productIdDelete</a>
                     </li>
@@ -888,7 +983,7 @@ margin-bottom: 20px;
         </div>
         <div id="header">
           <div id="api-_">
-            <h2 id="welcome-to-apidoc">API e documentação</h2>
+            <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
               <div class="app-desc">Version: 1.0.0</div>
             <hr>
             <div>Esta API tem a finalidade fazer cadastros de produto com operações de criar, deletar, atualizar e exibir, com usuários cadastrados e autenticado com JWT (Json Web Token) para que possam acessar rotas autorizadas, utlizando o framework Laravel como aplicação servidor.</div>
@@ -947,7 +1042,8 @@ public class LoginApiExample {
         LoginApi apiInstance = new LoginApi();
         Login body = ; // Login | Objeto LOGIN para obter token e ter acesso ao sistema
         try {
-            apiInstance.loginPost(body);
+            SuccesResponseLogin result = apiInstance.loginPost(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LoginApi#loginPost");
             e.printStackTrace();
@@ -965,7 +1061,8 @@ public class LoginApiExample {
         LoginApi apiInstance = new LoginApi();
         Login body = ; // Login | Objeto LOGIN para obter token e ter acesso ao sistema
         try {
-            apiInstance.loginPost(body);
+            SuccesResponseLogin result = apiInstance.loginPost(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LoginApi#loginPost");
             e.printStackTrace();
@@ -984,7 +1081,10 @@ LoginApi *apiInstance = [[LoginApi alloc] init];
 
 // Login no sistema para obter token
 [apiInstance loginPostWith:body
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(SuccesResponseLogin output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -1004,7 +1104,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.loginPost(body, callback);
@@ -1034,7 +1134,8 @@ namespace Example
             try
             {
                 // Login no sistema para obter token
-                apiInstance.loginPost(body);
+                SuccesResponseLogin result = apiInstance.loginPost(body);
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -1054,7 +1155,8 @@ $api_instance = new Swagger\Client\Api\LoginApi();
 $body = ; // Login | Objeto LOGIN para obter token e ter acesso ao sistema
 
 try {
-    $api_instance->loginPost($body);
+    $result = $api_instance->loginPost($body);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling LoginApi->loginPost: ', $e->getMessage(), PHP_EOL;
 }
@@ -1070,7 +1172,8 @@ my $api_instance = WWW::SwaggerClient::LoginApi->new();
 my $body = WWW::SwaggerClient::Object::Login->new(); # Login | Objeto LOGIN para obter token e ter acesso ao sistema
 
 eval { 
-    $api_instance->loginPost(body => $body);
+    my $result = $api_instance->loginPost(body => $body);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling LoginApi->loginPost: $@\n";
@@ -1090,7 +1193,8 @@ body =  # Login | Objeto LOGIN para obter token e ter acesso ao sistema
 
 try: 
     # Login no sistema para obter token
-    api_instance.login_post(body)
+    api_response = api_instance.login_post(body)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling LoginApi->loginPost: %s\n" % e)</code></pre>
                             </div>
@@ -1146,20 +1250,90 @@ $(document).ready(function() {
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Succeso </h3>
+                            <h3> Status: 200 - Successfully generated token </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-loginPost-200-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-loginPost-200-schema">
+                                  <div id='responses-loginPost-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully generated token",
+  "schema" : {
+    "$ref" : "#/definitions/SuccesResponseLogin"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-loginPost-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-loginPost-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-loginPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 401 - Não autorizado </h3>
+                            <h3> Status: 401 - Unauthorized </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-loginPost-401-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-loginPost-401-schema">
+                                  <div id='responses-loginPost-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Unauthorized",
+  "schema" : {
+    "$ref" : "#/definitions/Unauthorized"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-loginPost-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-loginPost-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-loginPost-401-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -1217,7 +1391,8 @@ public class LogoutApiExample {
         
         LogoutApi apiInstance = new LogoutApi();
         try {
-            apiInstance.logoutUser();
+            Response result = apiInstance.logoutUser();
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LogoutApi#logoutUser");
             e.printStackTrace();
@@ -1234,7 +1409,8 @@ public class LogoutApiExample {
     public static void main(String[] args) {
         LogoutApi apiInstance = new LogoutApi();
         try {
-            apiInstance.logoutUser();
+            Response result = apiInstance.logoutUser();
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LogoutApi#logoutUser");
             e.printStackTrace();
@@ -1252,7 +1428,10 @@ LogoutApi *apiInstance = [[LogoutApi alloc] init];
 
 // Desconecta a sessão atual
 [apiInstance logoutUserWithCompletionHandler: 
-              ^(NSError* error) {
+              ^(Response output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -1269,7 +1448,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.logoutUser(callback);
@@ -1298,7 +1477,8 @@ namespace Example
             try
             {
                 // Desconecta a sessão atual
-                apiInstance.logoutUser();
+                Response result = apiInstance.logoutUser();
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -1317,7 +1497,8 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\Api\LogoutApi();
 
 try {
-    $api_instance->logoutUser();
+    $result = $api_instance->logoutUser();
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling LogoutApi->logoutUser: ', $e->getMessage(), PHP_EOL;
 }
@@ -1332,7 +1513,8 @@ use WWW::SwaggerClient::LogoutApi;
 my $api_instance = WWW::SwaggerClient::LogoutApi->new();
 
 eval { 
-    $api_instance->logoutUser();
+    my $result = $api_instance->logoutUser();
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling LogoutApi->logoutUser: $@\n";
@@ -1351,7 +1533,8 @@ api_instance = swagger_client.LogoutApi()
 
 try: 
     # Desconecta a sessão atual
-    api_instance.logout_user()
+    api_response = api_instance.logout_user()
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling LogoutApi->logoutUser: %s\n" % e)</code></pre>
                             </div>
@@ -1365,12 +1548,133 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: default - Sucesso: usuário foi deslogado com sucesso </h3>
+                            <h3> Status: 200 - Successfully logged out </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-logoutUser-200-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-logoutUser-200-schema">
+                                  <div id='responses-logoutUser-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully logged out",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-logoutUser-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-logoutUser-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-logoutUser-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 401 - Token is Invalid </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-logoutUser-401-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-logoutUser-401-schema">
+                                  <div id='responses-logoutUser-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Invalid",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-logoutUser-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-logoutUser-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-logoutUser-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-logoutUser-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-logoutUser-403-schema">
+                                  <div id='responses-logoutUser-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-logoutUser-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-logoutUser-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-logoutUser-403-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -1428,7 +1732,7 @@ public class ProductApiExample {
         
         ProductApi apiInstance = new ProductApi();
         try {
-            Product+ProdColors result = apiInstance.getProduct();
+            array[ProductProdColors] result = apiInstance.getProduct();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#getProduct");
@@ -1446,7 +1750,7 @@ public class ProductApiExample {
     public static void main(String[] args) {
         ProductApi apiInstance = new ProductApi();
         try {
-            Product+ProdColors result = apiInstance.getProduct();
+            array[ProductProdColors] result = apiInstance.getProduct();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#getProduct");
@@ -1465,7 +1769,7 @@ ProductApi *apiInstance = [[ProductApi alloc] init];
 
 // Rotorna todos produtos
 [apiInstance getProductWithCompletionHandler: 
-              ^(Product+ProdColors output, NSError* error) {
+              ^(array[ProductProdColors] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -1514,7 +1818,7 @@ namespace Example
             try
             {
                 // Rotorna todos produtos
-                Product+ProdColors result = apiInstance.getProduct();
+                array[ProductProdColors] result = apiInstance.getProduct();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -1585,7 +1889,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Sucesso </h3>
+                            <h3> Status: 200 - Successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -1600,9 +1904,12 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Sucesso",
+  "description" : "Successfully",
   "schema" : {
-    "$ref" : "#/definitions/Product+ProdColors"
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/ProductProdColors"
+    }
   }
 };
                                         var schema = schemaWrapper.schema;
@@ -1625,6 +1932,599 @@ except ApiException as e:
                                     </script>
                                   </div>
                                   <input id='responses-getProduct-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProduct-401-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProduct-401-schema">
+                                  <div id='responses-getProduct-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProduct-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProduct-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProduct-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProduct-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProduct-403-schema">
+                                  <div id='responses-getProduct-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProduct-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProduct-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProduct-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Product-getProductId">
+                      <article id="api-Product-getProductId-0" data-group="User" data-name="getProductId" data-version="0">
+                        <div class="pull-left">
+                          <h1>getProductId</h1>
+                          <p>Retorna um produto pelo seu id</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Para uma resposta válida, insira IDs com valor inteiro positivo. Valores negativos ou não inteiros gerarão erros de API.</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/product/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Product-getProductId-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Product-getProductId-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Product-getProductId-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Product-getProductId-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Product-getProductId-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Product-getProductId-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Product-getProductId-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "https://lcoalhost/api/v1/product/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Product-getProductId-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.ProductApi;
+
+import java.io.File;
+import java.util.*;
+
+public class ProductApiExample {
+
+    public static void main(String[] args) {
+        
+        ProductApi apiInstance = new ProductApi();
+        Integer id = 56; // Integer | code that matches unique ID
+        try {
+            ProductProdColors result = apiInstance.getProductId(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ProductApi#getProductId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Product-getProductId-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.ProductApi;
+
+public class ProductApiExample {
+
+    public static void main(String[] args) {
+        ProductApi apiInstance = new ProductApi();
+        Integer id = 56; // Integer | code that matches unique ID
+        try {
+            ProductProdColors result = apiInstance.getProductId(id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ProductApi#getProductId");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Product-getProductId-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Product-getProductId-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Integer *id = 56; // code that matches unique ID
+
+ProductApi *apiInstance = [[ProductApi alloc] init];
+
+// Retorna um produto pelo seu id
+[apiInstance getProductIdWith:id
+              completionHandler: ^(ProductProdColors output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Product-getProductId-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var ApiProduto = require('api_produto');
+
+var api = new ApiProduto.ProductApi()
+
+var id = 56; // {Integer} code that matches unique ID
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.getProductId(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Product-getProductId-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Product-getProductId-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getProductIdExample
+    {
+        public void main()
+        {
+            
+            var apiInstance = new ProductApi();
+            var id = 56;  // Integer | code that matches unique ID
+
+            try
+            {
+                // Retorna um produto pelo seu id
+                ProductProdColors result = apiInstance.getProductId(id);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling ProductApi.getProductId: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Product-getProductId-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\Api\ProductApi();
+$id = 56; // Integer | code that matches unique ID
+
+try {
+    $result = $api_instance->getProductId($id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ProductApi->getProductId: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Product-getProductId-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::ProductApi;
+
+my $api_instance = WWW::SwaggerClient::ProductApi->new();
+my $id = 56; # Integer | code that matches unique ID
+
+eval { 
+    my $result = $api_instance->getProductId(id => $id);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling ProductApi->getProductId: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Product-getProductId-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.ProductApi()
+id = 56 # Integer | code that matches unique ID
+
+try: 
+    # Retorna um produto pelo seu id
+    api_response = api_instance.get_product_id(id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling ProductApi->getProductId: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+<td>
+
+
+    <div id="d2e199_getProductId_id">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description">
+                        code that matches unique ID
+                    </div>
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Successfully </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-200-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-200-schema">
+                                  <div id='responses-getProductId-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully",
+  "schema" : {
+    "$ref" : "#/definitions/ProductProdColors"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - Bad Request. The request format is not recognized or there are validation errors. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-400-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-400-schema">
+                                  <div id='responses-getProductId-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Bad Request. The request format is not recognized or there are validation errors.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-401-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-401-schema">
+                                  <div id='responses-getProductId-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-403-schema">
+                                  <div id='responses-getProductId-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 404 - Cannot find find the requested resource. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-404-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-404-schema">
+                                  <div id='responses-getProductId-404-schema-404' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Cannot find find the requested resource.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-404-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-404-schema-404');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-404-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 500 - Something unexpected prevented him from fulfilling the request. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-getProductId-500-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-getProductId-500-schema">
+                                  <div id='responses-getProductId-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Something unexpected prevented him from fulfilling the request.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-getProductId-500-schema-data').val(stringify(schema));
+                                        var result = $('#responses-getProductId-500-schema-500');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-getProductId-500-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
 
@@ -1679,9 +2579,10 @@ public class ProductApiExample {
     public static void main(String[] args) {
         
         ProductApi apiInstance = new ProductApi();
-        Long id = 789; // Long | 
+        Long id = 789; // Long | code that matches unique ID
         try {
-            apiInstance.productIdDelete(id);
+            Response result = apiInstance.productIdDelete(id);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productIdDelete");
             e.printStackTrace();
@@ -1697,9 +2598,10 @@ public class ProductApiExample {
 
     public static void main(String[] args) {
         ProductApi apiInstance = new ProductApi();
-        Long id = 789; // Long | 
+        Long id = 789; // Long | code that matches unique ID
         try {
-            apiInstance.productIdDelete(id);
+            Response result = apiInstance.productIdDelete(id);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productIdDelete");
             e.printStackTrace();
@@ -1712,13 +2614,16 @@ public class ProductApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Product-productIdDelete-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Long *id = 789; // 
+                              <pre class="prettyprint"><code class="language-cpp">Long *id = 789; // code that matches unique ID
 
 ProductApi *apiInstance = [[ProductApi alloc] init];
 
 // Deleta produto pelo id
 [apiInstance productIdDeleteWith:id
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(Response output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -1731,14 +2636,14 @@ ProductApi *apiInstance = [[ProductApi alloc] init];
 
 var api = new ApiProduto.ProductApi()
 
-var id = 789; // {Long} 
+var id = 789; // {Long} code that matches unique ID
 
 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.productIdDelete(id, callback);
@@ -1763,12 +2668,13 @@ namespace Example
         {
             
             var apiInstance = new ProductApi();
-            var id = 789;  // Long | 
+            var id = 789;  // Long | code that matches unique ID
 
             try
             {
                 // Deleta produto pelo id
-                apiInstance.productIdDelete(id);
+                Response result = apiInstance.productIdDelete(id);
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -1785,10 +2691,11 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\ProductApi();
-$id = 789; // Long | 
+$id = 789; // Long | code that matches unique ID
 
 try {
-    $api_instance->productIdDelete($id);
+    $result = $api_instance->productIdDelete($id);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProductApi->productIdDelete: ', $e->getMessage(), PHP_EOL;
 }
@@ -1801,10 +2708,11 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProductApi;
 
 my $api_instance = WWW::SwaggerClient::ProductApi->new();
-my $id = 789; # Long | 
+my $id = 789; # Long | code that matches unique ID
 
 eval { 
-    $api_instance->productIdDelete(id => $id);
+    my $result = $api_instance->productIdDelete(id => $id);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling ProductApi->productIdDelete: $@\n";
@@ -1820,11 +2728,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ProductApi()
-id = 789 # Long | 
+id = 789 # Long | code that matches unique ID
 
 try: 
     # Deleta produto pelo id
-    api_instance.product_id_delete(id)
+    api_response = api_instance.product_id_delete(id)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProductApi->productIdDelete: %s\n" % e)</code></pre>
                             </div>
@@ -1853,7 +2762,7 @@ except ApiException as e:
                     </span>
 
                     <div class="inner description">
-                        
+                        code that matches unique ID
                     </div>
             </div>
                 <div class="inner required">
@@ -1871,20 +2780,262 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Produto deletado com sucesso </h3>
+                            <h3> Status: 200 - Successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-200-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-200-schema">
+                                  <div id='responses-productIdDelete-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-200-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 404 - Produto não encontrado </h3>
+                            <h3> Status: 400 - Bad Request. The request format is not recognized or there are validation errors. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-400-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-400-schema">
+                                  <div id='responses-productIdDelete-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Bad Request. The request format is not recognized or there are validation errors.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-401-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-401-schema">
+                                  <div id='responses-productIdDelete-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-403-schema">
+                                  <div id='responses-productIdDelete-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 404 - Cannot find find the requested resource. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-404-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-404-schema">
+                                  <div id='responses-productIdDelete-404-schema-404' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Cannot find find the requested resource.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-404-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-404-schema-404');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-404-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 500 - Something unexpected prevented him from fulfilling the request. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdDelete-500-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdDelete-500-schema">
+                                  <div id='responses-productIdDelete-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Something unexpected prevented him from fulfilling the request.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdDelete-500-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdDelete-500-schema-500');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdDelete-500-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -1938,10 +3089,11 @@ public class ProductApiExample {
     public static void main(String[] args) {
         
         ProductApi apiInstance = new ProductApi();
-        String id = id_example; // String | 
-        Product+ProdColors body = ; // Product+ProdColors | Atualiza produto
+        String id = id_example; // String | code that matches unique ID
+        ProductProdColorsUpdate body = ; // ProductProdColorsUpdate | Atualiza produto
         try {
-            apiInstance.productIdPut(id, body);
+            Response result = apiInstance.productIdPut(id, body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productIdPut");
             e.printStackTrace();
@@ -1957,10 +3109,11 @@ public class ProductApiExample {
 
     public static void main(String[] args) {
         ProductApi apiInstance = new ProductApi();
-        String id = id_example; // String | 
-        Product+ProdColors body = ; // Product+ProdColors | Atualiza produto
+        String id = id_example; // String | code that matches unique ID
+        ProductProdColorsUpdate body = ; // ProductProdColorsUpdate | Atualiza produto
         try {
-            apiInstance.productIdPut(id, body);
+            Response result = apiInstance.productIdPut(id, body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productIdPut");
             e.printStackTrace();
@@ -1973,15 +3126,18 @@ public class ProductApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Product-productIdPut-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *id = id_example; // 
-Product+ProdColors *body = ; // Atualiza produto
+                              <pre class="prettyprint"><code class="language-cpp">String *id = id_example; // code that matches unique ID
+ProductProdColorsUpdate *body = ; // Atualiza produto
 
 ProductApi *apiInstance = [[ProductApi alloc] init];
 
 // Atualiza produto
 [apiInstance productIdPutWith:id
     body:body
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(Response output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -1994,16 +3150,16 @@ ProductApi *apiInstance = [[ProductApi alloc] init];
 
 var api = new ApiProduto.ProductApi()
 
-var id = id_example; // {String} 
+var id = id_example; // {String} code that matches unique ID
 
-var body = ; // {Product+ProdColors} Atualiza produto
+var body = ; // {ProductProdColorsUpdate} Atualiza produto
 
 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.productIdPut(id, body, callback);
@@ -2028,13 +3184,14 @@ namespace Example
         {
             
             var apiInstance = new ProductApi();
-            var id = id_example;  // String | 
-            var body = new Product+ProdColors(); // Product+ProdColors | Atualiza produto
+            var id = id_example;  // String | code that matches unique ID
+            var body = new ProductProdColorsUpdate(); // ProductProdColorsUpdate | Atualiza produto
 
             try
             {
                 // Atualiza produto
-                apiInstance.productIdPut(id, body);
+                Response result = apiInstance.productIdPut(id, body);
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -2051,11 +3208,12 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\ProductApi();
-$id = id_example; // String | 
-$body = ; // Product+ProdColors | Atualiza produto
+$id = id_example; // String | code that matches unique ID
+$body = ; // ProductProdColorsUpdate | Atualiza produto
 
 try {
-    $api_instance->productIdPut($id, $body);
+    $result = $api_instance->productIdPut($id, $body);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProductApi->productIdPut: ', $e->getMessage(), PHP_EOL;
 }
@@ -2068,11 +3226,12 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProductApi;
 
 my $api_instance = WWW::SwaggerClient::ProductApi->new();
-my $id = id_example; # String | 
-my $body = WWW::SwaggerClient::Object::Product+ProdColors->new(); # Product+ProdColors | Atualiza produto
+my $id = id_example; # String | code that matches unique ID
+my $body = WWW::SwaggerClient::Object::ProductProdColorsUpdate->new(); # ProductProdColorsUpdate | Atualiza produto
 
 eval { 
-    $api_instance->productIdPut(id => $id, body => $body);
+    my $result = $api_instance->productIdPut(id => $id, body => $body);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling ProductApi->productIdPut: $@\n";
@@ -2088,12 +3247,13 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ProductApi()
-id = id_example # String | 
-body =  # Product+ProdColors | Atualiza produto
+id = id_example # String | code that matches unique ID
+body =  # ProductProdColorsUpdate | Atualiza produto
 
 try: 
     # Atualiza produto
-    api_instance.product_id_put(id, body)
+    api_response = api_instance.product_id_put(id, body)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProductApi->productIdPut: %s\n" % e)</code></pre>
                             </div>
@@ -2119,7 +3279,7 @@ except ApiException as e:
                 </span>
 
                     <div class="inner description">
-                        
+                        code that matches unique ID
                     </div>
             </div>
                 <div class="inner required">
@@ -2151,7 +3311,7 @@ $(document).ready(function() {
   "description" : "Atualiza produto",
   "required" : true,
   "schema" : {
-    "$ref" : "#/definitions/Product+ProdColors"
+    "$ref" : "#/definitions/ProductProdColorsUpdate"
   }
 };
   var schema = schemaWrapper.schema;
@@ -2179,28 +3339,262 @@ $(document).ready(function() {
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 201 - Produto foi atualizado com sucesso </h3>
+                            <h3> Status: 200 - Successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-200-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-200-schema">
+                                  <div id='responses-productIdPut-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-200-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 400 - Erro: existem erros de validações do cliente </h3>
+                            <h3> Status: 400 - Bad Request. The request format is not recognized or there are validation errors. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-400-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-400-schema">
+                                  <div id='responses-productIdPut-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Bad Request. The request format is not recognized or there are validation errors.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-400-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 500 - Erro: Aconteu algo inesperado devido erro interno. </h3>
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-401-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-401-schema">
+                                  <div id='responses-productIdPut-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-403-schema">
+                                  <div id='responses-productIdPut-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 404 - Cannot find find the requested resource. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-404-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-404-schema">
+                                  <div id='responses-productIdPut-404-schema-404' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Cannot find find the requested resource.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-404-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-404-schema-404');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-404-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 500 - Something unexpected prevented him from fulfilling the request. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productIdPut-500-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productIdPut-500-schema">
+                                  <div id='responses-productIdPut-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Something unexpected prevented him from fulfilling the request.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productIdPut-500-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productIdPut-500-schema-500');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productIdPut-500-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -2210,7 +3604,7 @@ $(document).ready(function() {
                       <article id="api-Product-productPost-0" data-group="User" data-name="productPost" data-version="0">
                         <div class="pull-left">
                           <h1>productPost</h1>
-                          <p>Criar novo produto</p>
+                          <p>Cria novo produto</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -2254,9 +3648,10 @@ public class ProductApiExample {
     public static void main(String[] args) {
         
         ProductApi apiInstance = new ProductApi();
-        Product+ProdColors body = ; // Product+ProdColors | Criar novo produto
+        ProductProdColors body = ; // ProductProdColors | Criar novo produto
         try {
-            apiInstance.productPost(body);
+            Response result = apiInstance.productPost(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productPost");
             e.printStackTrace();
@@ -2272,9 +3667,10 @@ public class ProductApiExample {
 
     public static void main(String[] args) {
         ProductApi apiInstance = new ProductApi();
-        Product+ProdColors body = ; // Product+ProdColors | Criar novo produto
+        ProductProdColors body = ; // ProductProdColors | Criar novo produto
         try {
-            apiInstance.productPost(body);
+            Response result = apiInstance.productPost(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductApi#productPost");
             e.printStackTrace();
@@ -2287,13 +3683,16 @@ public class ProductApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Product-productPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Product+ProdColors *body = ; // Criar novo produto
+                              <pre class="prettyprint"><code class="language-cpp">ProductProdColors *body = ; // Criar novo produto
 
 ProductApi *apiInstance = [[ProductApi alloc] init];
 
-// Criar novo produto
+// Cria novo produto
 [apiInstance productPostWith:body
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(Response output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -2306,14 +3705,14 @@ ProductApi *apiInstance = [[ProductApi alloc] init];
 
 var api = new ApiProduto.ProductApi()
 
-var body = ; // {Product+ProdColors} Criar novo produto
+var body = ; // {ProductProdColors} Criar novo produto
 
 
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.productPost(body, callback);
@@ -2338,12 +3737,13 @@ namespace Example
         {
             
             var apiInstance = new ProductApi();
-            var body = new Product+ProdColors(); // Product+ProdColors | Criar novo produto
+            var body = new ProductProdColors(); // ProductProdColors | Criar novo produto
 
             try
             {
-                // Criar novo produto
-                apiInstance.productPost(body);
+                // Cria novo produto
+                Response result = apiInstance.productPost(body);
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -2360,10 +3760,11 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\ProductApi();
-$body = ; // Product+ProdColors | Criar novo produto
+$body = ; // ProductProdColors | Criar novo produto
 
 try {
-    $api_instance->productPost($body);
+    $result = $api_instance->productPost($body);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProductApi->productPost: ', $e->getMessage(), PHP_EOL;
 }
@@ -2376,10 +3777,11 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::ProductApi;
 
 my $api_instance = WWW::SwaggerClient::ProductApi->new();
-my $body = WWW::SwaggerClient::Object::Product+ProdColors->new(); # Product+ProdColors | Criar novo produto
+my $body = WWW::SwaggerClient::Object::ProductProdColors->new(); # ProductProdColors | Criar novo produto
 
 eval { 
-    $api_instance->productPost(body => $body);
+    my $result = $api_instance->productPost(body => $body);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling ProductApi->productPost: $@\n";
@@ -2395,11 +3797,12 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.ProductApi()
-body =  # Product+ProdColors | Criar novo produto
+body =  # ProductProdColors | Criar novo produto
 
 try: 
-    # Criar novo produto
-    api_instance.product_post(body)
+    # Cria novo produto
+    api_response = api_instance.product_post(body)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProductApi->productPost: %s\n" % e)</code></pre>
                             </div>
@@ -2427,7 +3830,7 @@ $(document).ready(function() {
   "description" : "Criar novo produto",
   "required" : true,
   "schema" : {
-    "$ref" : "#/definitions/Product+ProdColors"
+    "$ref" : "#/definitions/ProductProdColors"
   }
 };
   var schema = schemaWrapper.schema;
@@ -2455,28 +3858,219 @@ $(document).ready(function() {
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 201 - Produto foi criado com sucesso </h3>
+                            <h3> Status: 201 - Successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productPost-201-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productPost-201-schema">
+                                  <div id='responses-productPost-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Successfully",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productPost-201-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productPost-201-schema-201');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productPost-201-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 400 - Erro: existem erros de validações do cliente </h3>
+                            <h3> Status: 400 - Bad Request. The request format is not recognized or there are validation errors. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productPost-400-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productPost-400-schema">
+                                  <div id='responses-productPost-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Bad Request. The request format is not recognized or there are validation errors.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productPost-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productPost-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productPost-400-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 500 - Erro: Algo inesperado aconteceu devido erro interno. </h3>
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productPost-401-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productPost-401-schema">
+                                  <div id='responses-productPost-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productPost-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productPost-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productPost-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productPost-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productPost-403-schema">
+                                  <div id='responses-productPost-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productPost-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productPost-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productPost-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 500 - Something unexpected prevented him from fulfilling the request. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-productPost-500-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-productPost-500-schema">
+                                  <div id='responses-productPost-500-schema-500' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Something unexpected prevented him from fulfilling the request.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-productPost-500-schema-data').val(stringify(schema));
+                                        var result = $('#responses-productPost-500-schema-500');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-productPost-500-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -2535,7 +4129,8 @@ public class RegisterApiExample {
         RegisterApi apiInstance = new RegisterApi();
         Register body = ; // Register | Objeto USER que precisa ser criado no sistema
         try {
-            apiInstance.addUser(body);
+            Response result = apiInstance.addUser(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RegisterApi#addUser");
             e.printStackTrace();
@@ -2553,7 +4148,8 @@ public class RegisterApiExample {
         RegisterApi apiInstance = new RegisterApi();
         Register body = ; // Register | Objeto USER que precisa ser criado no sistema
         try {
-            apiInstance.addUser(body);
+            Response result = apiInstance.addUser(body);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RegisterApi#addUser");
             e.printStackTrace();
@@ -2572,7 +4168,10 @@ RegisterApi *apiInstance = [[RegisterApi alloc] init];
 
 // Registrar novo usuário
 [apiInstance addUserWith:body
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(Response output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -2592,7 +4191,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.addUser(body, callback);
@@ -2622,7 +4221,8 @@ namespace Example
             try
             {
                 // Registrar novo usuário
-                apiInstance.addUser(body);
+                Response result = apiInstance.addUser(body);
+                Debug.WriteLine(result);
             }
             catch (Exception e)
             {
@@ -2642,7 +4242,8 @@ $api_instance = new Swagger\Client\Api\RegisterApi();
 $body = ; // Register | Objeto USER que precisa ser criado no sistema
 
 try {
-    $api_instance->addUser($body);
+    $result = $api_instance->addUser($body);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling RegisterApi->addUser: ', $e->getMessage(), PHP_EOL;
 }
@@ -2658,7 +4259,8 @@ my $api_instance = WWW::SwaggerClient::RegisterApi->new();
 my $body = WWW::SwaggerClient::Object::Register->new(); # Register | Objeto USER que precisa ser criado no sistema
 
 eval { 
-    $api_instance->addUser(body => $body);
+    my $result = $api_instance->addUser(body => $body);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling RegisterApi->addUser: $@\n";
@@ -2678,7 +4280,8 @@ body =  # Register | Objeto USER que precisa ser criado no sistema
 
 try: 
     # Registrar novo usuário
-    api_instance.add_user(body)
+    api_response = api_instance.add_user(body)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling RegisterApi->addUser: %s\n" % e)</code></pre>
                             </div>
@@ -2734,20 +4337,90 @@ $(document).ready(function() {
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 201 - Sucesso: usuário foi criado </h3>
+                            <h3> Status: 201 - User was created successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-addUser-201-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-addUser-201-schema">
+                                  <div id='responses-addUser-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "User was created successfully",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-addUser-201-schema-data').val(stringify(schema));
+                                        var result = $('#responses-addUser-201-schema-201');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-addUser-201-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
-                            <h3> Status: 400 - Erro: existem erros de validações do cliente </h3>
+                            <h3> Status: 400 - There are validation errors </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-addUser-400-schema">Schema</a>
+                                </li>
+
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-addUser-400-schema">
+                                  <div id='responses-addUser-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "There are validation errors",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-addUser-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-addUser-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-addUser-400-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
 
                         </article>
@@ -2760,7 +4433,7 @@ $(document).ready(function() {
                       <article id="api-User-userGet-0" data-group="User" data-name="userGet" data-version="0">
                         <div class="pull-left">
                           <h1>userGet</h1>
-                          <p>Busca todos os usuários</p>
+                          <p>Rotorna todos os usuários</p>
                         </div>
                         <div class="pull-right"></div>
                         <div class="clearfix"></div>
@@ -2805,7 +4478,7 @@ public class UserApiExample {
         
         UserApi apiInstance = new UserApi();
         try {
-            User result = apiInstance.userGet();
+            array[User] result = apiInstance.userGet();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling UserApi#userGet");
@@ -2823,7 +4496,7 @@ public class UserApiExample {
     public static void main(String[] args) {
         UserApi apiInstance = new UserApi();
         try {
-            User result = apiInstance.userGet();
+            array[User] result = apiInstance.userGet();
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling UserApi#userGet");
@@ -2840,9 +4513,9 @@ public class UserApiExample {
                               <pre class="prettyprint"><code class="language-cpp">
 UserApi *apiInstance = [[UserApi alloc] init];
 
-// Busca todos os usuários
+// Rotorna todos os usuários
 [apiInstance userGetWithCompletionHandler: 
-              ^(User output, NSError* error) {
+              ^(array[User] output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -2890,8 +4563,8 @@ namespace Example
 
             try
             {
-                // Busca todos os usuários
-                User result = apiInstance.userGet();
+                // Rotorna todos os usuários
+                array[User] result = apiInstance.userGet();
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -2946,7 +4619,7 @@ from pprint import pprint
 api_instance = swagger_client.UserApi()
 
 try: 
-    # Busca todos os usuários
+    # Rotorna todos os usuários
     api_response = api_instance.user_get()
     pprint(api_response)
 except ApiException as e:
@@ -2962,7 +4635,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - Sucesso </h3>
+                            <h3> Status: 200 - Successfully </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -2977,9 +4650,12 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "Sucesso",
+  "description" : "Successfully",
   "schema" : {
-    "$ref" : "#/definitions/User"
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/User"
+    }
   }
 };
                                         var schema = schemaWrapper.schema;
@@ -3005,6 +4681,92 @@ except ApiException as e:
                                 </div>
                             </div>
 
+                            <h3> Status: 401 - Authorization information is missing or invalid. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-userGet-401-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-userGet-401-schema">
+                                  <div id='responses-userGet-401-schema-401' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Authorization information is missing or invalid.",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-userGet-401-schema-data').val(stringify(schema));
+                                        var result = $('#responses-userGet-401-schema-401');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-userGet-401-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 403 - Token is Expired </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-userGet-403-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-userGet-403-schema">
+                                  <div id='responses-userGet-403-schema-403' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Token is Expired",
+  "schema" : {
+    "$ref" : "#/definitions/Response"
+  }
+};
+                                        var schema = schemaWrapper.schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = defs;
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-userGet-403-schema-data').val(stringify(schema));
+                                        var result = $('#responses-userGet-403-schema-403');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-userGet-403-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
                         </article>
                       </div>
                       <hr>
@@ -3012,18 +4774,17 @@ except ApiException as e:
           </div>
           <div id="footer">
             <div id="api-_footer">
-              <p>
-                  Sugestões, contato, suporte e relatórios de erros;;
-                  <div class="app-desc">Site: <a href="http://wagnercastro.cf">http://wagnercastro.cf</a></div>
-                  <div class="app-desc">Contato para mais informações: <a href="wagner2014.castro@gmail.com">wagner2014.castro@gmail.com</a></div>
+              <p>Suggestions, contact, support and error reporting;
+                  <div class="app-desc">Information URL: <a href="https://helloreverb.com">https://helloreverb.com</a></div>
+                  <div class="app-desc">Contact Info: <a href="wagner2014.castro@gmail.com">wagner2014.castro@gmail.com</a></div>
               </p>
-                <div class="license-info">Todo os direitos reservados</div
+                <div class="license-info">All rights reserved</div>
+                <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
             </div>
           </div>
       </div>
     </div>
   </div>
-  <br/> <br/> <br/>
   <script>
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
