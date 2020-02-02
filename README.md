@@ -35,34 +35,7 @@ DB_PASSWORD=password
   $ php artisan migrate
 ```
 
-
 3 -) Precisa gerar uma chave secreta JWT, digite no terminal o comando abaixo. 
-
-#### 
-``` txt
-  $ php artisan jwt:secret
-```
-
-
-4-) Configurar banco de dados no arquivo .env na raiz do proejeto, conforme as configurações do seu bando de dados.
-
-#### 
-``` txt
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=api_laravel
-DB_USERNAME=username
-DB_PASSWORD=password
-```
-5 -) Criar as tabelas no banco de dados
-
-#### 
-``` txt
-  $ php artisan migrate
-```
-
-6 -) Precisa gerar uma chave secreta JWT, digite no terminal o comando abaixo. 
 
 #### 
 ``` txt
@@ -76,15 +49,14 @@ Após ter gerado a chave, aparecerá no arquivo .env uma chave semelhante a esta
   JWT_SECRET=vhhVxo0AVyN1vdYsqpzjUVM7hzNqj7GOosROEUmizQVsNKzL
 ```
 
-7 -) Subir o servidor 
+4 -) Subir o servidor 
 
 #### 
 ``` txt
   $ php artisan serve
 ```
 
-
-8 -) Agora já é possível testar a API, veja as rotas abaixo:
+5 -) Agora já é possível testar a API, veja as rotas abaixo:
 
 #### 
 ``` txt
