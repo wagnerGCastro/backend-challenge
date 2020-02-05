@@ -46,7 +46,7 @@ class ProductController extends Controller
         $result = $this->product->getProductAll();
 
         // checks if there was a database error
-        $this->responseDatabaseError($result);
+        if ( $response = $this->responseDatabaseError($result) ) { return $response; }
 
         return response()->json( $result );
     }
@@ -71,7 +71,7 @@ class ProductController extends Controller
             // Rules 
             $rules = [
                 'color_name'      => 'min:2|max:60',
-                'color_hexa'      => 'min:9|max:9'
+                'color_hexa'      => 'min:3|max:16'
             ];
 
             // Validator
@@ -128,18 +128,17 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
         
-        // checks if the product exists 
-        if( count($this->findDatabaseId($id)) == 0 ){
-            return response()->json(formatMessage(404, 'No results found.'), 404);
-        }
-        
+        // Checks if the product exists 
+        if ( $response = $this->findDatabaseId($id) ){ return $response; }
+
         $result = $this->product->getProductId($id);
 
         // checks if there was a database error
-        $this->responseDatabaseError($result);
+        if ( $response = $this->responseDatabaseError($result) ) { return $response; }
 
         return response()->json($result[0]);
     }
@@ -157,18 +156,15 @@ class ProductController extends Controller
 
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
-        
 
         // checks if the product exists 
         $result = $this->findDatabaseId($id); 
-        
-        if( count($result) == 0 ){
-            return response()->json(formatMessage(404, 'No results found.'), 404);
-        }
+
+        // Checks if exists  product in database
+        if( $response = $this->findDatabaseId($id) ) { return $response; };
 
         // Validation request
         if( $response = $this->productFormRequest->Validador($data) ) { return $response; };
-
 
         // Update table prod_colors if color_variation == 'Y' or Create
         $color_variation = $request->color_variation;
@@ -195,7 +191,6 @@ class ProductController extends Controller
             endif;
         endif;
 
-       
         // Chech if the fields exists and remove
         if( isset($data['id_prodcolor']) || isset($data['color_name']) || isset($data['color_hexa']) ) {
             
@@ -209,9 +204,9 @@ class ProductController extends Controller
         try {
             // Update
             $data['price'] = formatNumToMysql($data['price']);
-            DB::table($this->product['table'])->where('id', $id )->update($data);
+            DB::table('products')->where('id', $id )->update($data);
 
-            return response()->json(formatMessage(201, 'Successfully!') , 201);
+            return response()->json(formatMessage(200, 'Successfully!') , 200);
 
         } catch (\Exception $e) {
 
@@ -233,14 +228,13 @@ class ProductController extends Controller
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
 
-        // checks if the product exists 
-        if( count($this->findDatabaseId($id)) == 0 ){
-            return response()->json(formatMessage(404, 'No results found.'), 404);
-        }
+        // Checks if exists  product in database
+        if( $response = $this->findDatabaseId($id) ) { return $response; };
+
 
         try {
 
-            DB::table($this->product['table'])->where('id', $id )->delete();
+            DB::table('products')->where('id', $id )->delete();
             return response()->json(formatMessage(200,  'Successfully'), 200);
 
         }catch (\Exception $e) {
@@ -268,16 +262,30 @@ class ProductController extends Controller
     }
 
     /**
-    * Remove the specified resource from storage.
+    * Checks if the product exists 
     *
     * @param  \App\Product  $product
     * @return \Illuminate\Http\Response
     */
     private function findDatabaseId($id)
     {
-       return $result  = DB::table($this->product['table'])->where('id', $id )->get();
-    }
+        try {
 
+            $result  = DB::table('products')->where('id', $id )->get();
+
+            if( count( $result ) == 0 ):
+                return response()->json(formatMessage(404, 'No results found.'), 404);
+             endif;
+
+        }catch (\Exception $e) {
+
+            if(config('app.debug')):
+                return response()->json(formatMessage(1012, $e->getMessage()), 500);
+            endif;
+
+            return response()->json(formatMessage(500, 'Something unexpected prevented him from fulfilling the request.'), 500 );
+        }
+    }
 
      /**
      * storeVariationColor a newly created resource in storage.
@@ -331,8 +339,6 @@ class ProductController extends Controller
     */
     private function upadteVariationColor($data)
     {
-
-
         // checks if the product exists 
         $results  = DB::table($this->prodColor['table'])->where(['id' => $data['id_prodcolor'], 'id_products' => $data['id_products']])->get();
         if( count($results) == 0 ):
@@ -359,24 +365,17 @@ class ProductController extends Controller
             die;
         }
         
-
-
         try {
-          
             // Update table prod_colors
             DB::table($this->prodColor['table'])->where('id', $data['id_prodcolor'] )->update($dataUpadte);
 
         } catch (\Exception $e) {
-
             if(config('app.debug')):
                 return response()->json(formatMessage(1011, $e->getMessage()),  500);
             endif;
 
             return response()->json(formatMessage(500, 'Something unexpected prevented him from fulfilling the request'), 500);
         }
-    
-
-       
     }
 
     /**
