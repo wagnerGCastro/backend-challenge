@@ -18,6 +18,9 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\Cors::class,
+        
+
     ];
 
     /**
@@ -39,6 +42,9 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            \Fruitcake\Cors\HandleCors::class,
+            //\App\Http\Middleware\Cors::class,
+
         ],
     ];
 
@@ -57,5 +63,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'apiJwt' => \App\Http\Middleware\ApiProtectedRoute::class,
+        //'cors' => \App\Http\Middleware\CORS::class
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 }

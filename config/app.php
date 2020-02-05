@@ -168,6 +168,8 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        FruitCake\Cors\CorsServiceProvider::class,
+        
 
         /*
          * Application Service Providers...
