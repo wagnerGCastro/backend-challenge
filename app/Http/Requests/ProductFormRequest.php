@@ -16,7 +16,7 @@ class ProductFormRequest
     public function Validador($data)
     {
         $validator = Validator::make($data , $this->rules(), $this->messages());
-
+       
         if ($validator->fails()) {
             return response()->json(formatMessage(400, $validator->messages()), 400);
         }

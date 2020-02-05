@@ -18,10 +18,11 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(formatMessage(401, 'Unauthorized logged out'), 200);
         }
 
         return $this->respondWithToken($token);
@@ -85,15 +86,16 @@ class AuthController extends Controller
         // Rules 
         $rules = [
             'name'        => 'required|min:2|max:120',
-            'email'       => 'required|min:2|max:120||unique:users',
+            'email'       => 'required|min:2|email|max:120||unique:users',
             'password'    => 'required|min:6|max:8',
         ];
     
         // Validator
         $validator = Validator::make($request->all() , $rules);
 
+
         if ($validator->fails()) {
-            return response()->json(formatMessage(400, $validator->messages()), 400);
+            return response()->json(formatMessage(400, $validator->messages(), 400));
             die;
         }
 
