@@ -17,7 +17,7 @@ class Product extends Model
             "SELECT     a.id as id_product, b.id as id_prodcolor, a.name, a.price, 
                         a.description, a.color_variation, b.color_hexa, b.color_name
                FROM     products AS a
-          LEFT JOIN     prod_colors AS b ON a.id = b.id_products       
+          LEFT JOIN     prod_colors AS b ON a.id = b.id_product     
            ORDER BY     a.id DESC"
         );
  
@@ -43,14 +43,14 @@ class Product extends Model
             "SELECT     a.id as id_product, b.id as id_prodcolor, a.name, a.price, 
                         a.description, a.color_variation, b.color_hexa, b.color_name
                FROM     products AS a
-          LEFT JOIN     prod_colors AS b ON a.id = b.id_products       
+          LEFT JOIN     prod_colors AS b ON a.id = b.id_product      
               WHERE     a.id  =  $id  $and_id_prodcolor 
            ORDER BY     a.id DESC"
               
         );
 
         try{
-           $results = DB::select($sql);
+            $results = DB::select($sql);
 
         } catch (\Exception $ex){
             $results = (object) ['error' => $ex->getMessage()];
