@@ -71,7 +71,7 @@ class ProductController extends Controller
             // Rules 
             $rules = [
                 'color_name'      => 'min:2|max:60',
-                'color_hexa'      => 'min:3|max:16'
+                'color_hexa'      => 'min:3|max:9'
             ];
 
             // Validator
@@ -102,7 +102,7 @@ class ProductController extends Controller
             // Insert table prod_color
             $color_variation = $requestData['color_variation'];
             if( isset($color_variation) && $color_variation !== null && $color_variation == 'Y' &&  $prodcuinsertedId !== 0):
-                $this->prodColor->id_products = $prodcuinsertedId->id;
+                $this->prodColor->id_product = $prodcuinsertedId->id;
                 $this->prodColor->color_name = $requestData['color_name'];
                 $this->prodColor->color_hexa = $requestData['color_hexa'];
                 $this->prodColor->save();
@@ -117,7 +117,6 @@ class ProductController extends Controller
             }
             return response()->json(formatMessage(500, 'Something unexpected prevented him from fulfilling the request.'), 500);
         }
-
     }
 
     /**
@@ -128,7 +127,6 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
         
@@ -152,6 +150,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $data = $request->all();
 
         // Checks if parameter was passed with $id of type Integer
@@ -169,7 +168,7 @@ class ProductController extends Controller
         // Update table prod_colors if color_variation == 'Y' or Create
         $color_variation = $request->color_variation;
         if( isset($color_variation) && $color_variation !== null && $color_variation == 'Y' ):
-       
+
             // Chech if the fields exists
             if( !isset($data['id_prodcolor']) || !isset($data['color_name']) || !isset($data['color_hexa']) ) {
                 return response()->json(formatMessage(400, 'color_name or color_hexa or id_prodcolor fields are required'), 400);
@@ -178,27 +177,20 @@ class ProductController extends Controller
             // checks if the id prod_color not null  ou empty
             if( !is_null($data['id_prodcolor']) || !empty($data['id_prodcolor']) ):
                 $data['id_prodcolor'] = (int) filter_var($data['id_prodcolor'], FILTER_SANITIZE_NUMBER_INT);
-                $data['id_products']   = (int) $id;
+                $data['id_product']   = (int) $id;
 
                 if( is_integer($data['id_prodcolor']) ):
                    if( $response = $this->upadteVariationColor($data) ) { return $response; };
                 else:
-                   
                     return response()->json(formatMessage(400, 'check if the  id_prodolor was entered correctly, or does not exist.'), 400);
                 endif;
             else:
                 $this->storeVariationColor($request, $id);
             endif;
-        endif;
+        endif;  
 
-        // Chech if the fields exists and remove
-        if( isset($data['id_prodcolor']) || isset($data['color_name']) || isset($data['color_hexa']) ) {
-            
-            unset($data['id_prodcolor']); 
-            unset($data['id_products']);
-            unset($data['color_name']); 
-            unset($data['color_hexa']); 
-        } 
+        // Check if the fields exists and remove
+        $data = array_except( $data, ['id_prodcolor','id_product','color_name', 'color_hexa']);
 
         // Update table products
         try {
@@ -297,13 +289,13 @@ class ProductController extends Controller
     {
         // Rules 
         $rules = [
-            'id_products'     => 'required|integer|',
+            'id_product'     => 'required|integer|',
             'color_name'      => 'required|min:2|max:60|',
-            'color_hexa'      => 'required|min:9|max:9|',
+            'color_hexa'      => 'required|min:3|max:9|',
         ];
 
         $data = [
-            'id_products' => $id,
+            'id_product' => $id,
             'color_hexa' => $request->color_hexa,
             'color_name' => $request->color_name,
         ]; 
@@ -313,7 +305,6 @@ class ProductController extends Controller
 
         if ($validator->fails()) {
             return response()->json(formatMessage(404, $validator->messages()), 404);
-            die;
         }
 
         try {
@@ -324,10 +315,8 @@ class ProductController extends Controller
 
             if(config('app.debug')) {
                 return response()->json(formatMessage(1010, $e->getMessage()),  500);
-                die;
             }
             return response()->json(formatMessage(1010, 'There was an error while performing save operation.'), 500);
-            die;
         }
     }
 
@@ -340,16 +329,15 @@ class ProductController extends Controller
     private function upadteVariationColor($data)
     {
         // checks if the product exists 
-        $results  = DB::table($this->prodColor['table'])->where(['id' => $data['id_prodcolor'], 'id_products' => $data['id_products']])->get();
+        $results  = DB::table('prod_colors')->where(['id' => $data['id_prodcolor'], 'id_product' => $data['id_product']])->get();
         if( count($results) == 0 ):
-            return response()->json(formatMessage(400, "No product registration with color variation found with this ID = {$data['id']}"), 400);
+            return response()->json(formatMessage(400, "No product registration with color variation was found."), 400);
         endif;
-
 
         // Rules 
         $rules = [
             'color_name'      => 'required|min:2|max:60|',
-            'color_hexa'      => 'required|min:9|max:9|',
+            'color_hexa'      => 'required|min:3|max:9|',
         ];
 
         $dataUpadte = [
@@ -361,13 +349,13 @@ class ProductController extends Controller
         $validator = Validator::make($dataUpadte , $rules);
 
         if ($validator->fails()) {
+            
             return response()->json(formatMessage(400, $validator->messages()), 400);
-            die;
         }
         
         try {
             // Update table prod_colors
-            DB::table($this->prodColor['table'])->where('id', $data['id_prodcolor'] )->update($dataUpadte);
+            DB::table('prod_colors')->where('id', $data['id_prodcolor'] )->update($dataUpadte);
 
         } catch (\Exception $e) {
             if(config('app.debug')):
