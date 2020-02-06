@@ -168,16 +168,14 @@ class ProductController extends Controller
         // Update table prod_colors if color_variation == 'Y' or Create
         $color_variation = $request->color_variation;
         if( isset($color_variation) && $color_variation !== null && $color_variation == 'Y' ):
-
-            // Chech if the fields exists
-            if( !isset($data['id_prodcolor']) || !isset($data['color_name']) || !isset($data['color_hexa']) ) {
-                return response()->json(formatMessage(400, 'color_name or color_hexa or id_prodcolor fields are required'), 400);
-            } 
-
-            // checks if the id prod_color not null  ou empty
-            if( !is_null($data['id_prodcolor']) || !empty($data['id_prodcolor']) ):
+            if(!empty($data['id_prodcolor'])):
+                // Chech if the fields exists
+                if( !isset($data['color_name']) || !isset($data['color_hexa']) ) {
+                    return response()->json(formatMessage(400, 'color_name or color_hexa or fields are required'), 400);
+                } 
+              
                 $data['id_prodcolor'] = (int) filter_var($data['id_prodcolor'], FILTER_SANITIZE_NUMBER_INT);
-                $data['id_product']   = (int) $id;
+                $data['id_product']   = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
                 if( is_integer($data['id_prodcolor']) ):
                    if( $response = $this->upadteVariationColor($data) ) { return $response; };
