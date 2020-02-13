@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 class AuthController extends Controller
 {
     //https://jwt-auth.readthedocs.io/en/develop/quick-start/
-    
+
     /**
      * Get a JWT via given credentials.
      *
@@ -18,11 +18,10 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(formatMessage(401, 'Unauthorized logged out'), 200);
+            return response()->json(formatMessage(401, 'Unauthorized logged out'), 401);
         }
 
         return $this->respondWithToken($token);
@@ -83,19 +82,18 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        // Rules 
+        // Rules
         $rules = [
             'name'        => 'required|min:2|max:120',
             'email'       => 'required|min:2|email|max:120||unique:users',
             'password'    => 'required|min:6|max:8',
         ];
-    
+
         // Validator
         $validator = Validator::make($request->all() , $rules);
 
-
         if ($validator->fails()) {
-            return response()->json(formatMessage(400, $validator->messages(), 400));
+            return response()->json(formatMessage(400, $validator->messages()), 400);
             die;
         }
 

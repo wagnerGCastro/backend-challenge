@@ -68,7 +68,7 @@ class ProductController extends Controller
         // If color_variation = 'Y'
         $color_variation = $request->color_variation;
         if( isset($color_variation) && $color_variation !== null && $color_variation == 'Y' ){
-            // Rules 
+            // Rules
             $rules = [
                 'color_name'      => 'min:2|max:60',
                 'color_hexa'      => 'min:3|max:9'
@@ -84,9 +84,9 @@ class ProductController extends Controller
 
             // Chech if the fields exists and remove
             if( isset($data['color_name']) || isset($data['color_hexa']) ) {
-                unset($data['color_name']); 
-                unset($data['color_hexa']); 
-            } 
+                unset($data['color_name']);
+                unset($data['color_hexa']);
+            }
         }
 
         // Validation request
@@ -122,15 +122,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Product  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
-        
-        // Checks if the product exists 
+
+        // Checks if the product exists
         if ( $response = $this->findDatabaseId($id) ){ return $response; }
 
         $result = $this->product->getProductId($id);
@@ -145,19 +145,18 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  id $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-
         $data = $request->all();
 
         // Checks if parameter was passed with $id of type Integer
         if( $response = $this->checkParamId($id) ) { return $response; };
 
-        // checks if the product exists 
-        $result = $this->findDatabaseId($id); 
+        // checks if the product exists
+        $result = $this->findDatabaseId($id);
 
         // Checks if exists  product in database
         if( $response = $this->findDatabaseId($id) ) { return $response; };
@@ -172,8 +171,8 @@ class ProductController extends Controller
                 // Chech if the fields exists
                 if( !isset($data['color_name']) || !isset($data['color_hexa']) ) {
                     return response()->json(formatMessage(400, 'color_name or color_hexa or fields are required'), 400);
-                } 
-              
+                }
+
                 $data['id_prodcolor'] = (int) filter_var($data['id_prodcolor'], FILTER_SANITIZE_NUMBER_INT);
                 $data['id_product']   = (int) filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
@@ -185,7 +184,7 @@ class ProductController extends Controller
             else:
                 $this->storeVariationColor($request, $id);
             endif;
-        endif;  
+        endif;
 
         // Check if the fields exists and remove
         $data = array_except( $data, ['id_prodcolor','id_product','color_name', 'color_hexa']);
@@ -210,7 +209,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Product  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -220,7 +219,6 @@ class ProductController extends Controller
 
         // Checks if exists  product in database
         if( $response = $this->findDatabaseId($id) ) { return $response; };
-
 
         try {
 
@@ -240,7 +238,7 @@ class ProductController extends Controller
      /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Product  $id
      * @return \Illuminate\Http\Response
      */
     private function checkParamId($id)
@@ -252,9 +250,9 @@ class ProductController extends Controller
     }
 
     /**
-    * Checks if the product exists 
+    * Checks if the product exists
     *
-    * @param  \App\Product  $product
+    * @param  \App\Product  $id
     * @return \Illuminate\Http\Response
     */
     private function findDatabaseId($id)
@@ -281,11 +279,12 @@ class ProductController extends Controller
      * storeVariationColor a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Product  $id
      * @return \Illuminate\Http\Response
      */
     private function storeVariationColor($request, $id)
     {
-        // Rules 
+        // Rules
         $rules = [
             'id_product'     => 'required|integer|',
             'color_name'      => 'required|min:2|max:60|',
@@ -296,8 +295,8 @@ class ProductController extends Controller
             'id_product' => $id,
             'color_hexa' => $request->color_hexa,
             'color_name' => $request->color_name,
-        ]; 
-    
+        ];
+
         // Validator
         $validator = Validator::make($data , $rules);
 
@@ -326,13 +325,13 @@ class ProductController extends Controller
     */
     private function upadteVariationColor($data)
     {
-        // checks if the product exists 
+        // checks if the product exists
         $results  = DB::table('prod_colors')->where(['id' => $data['id_prodcolor'], 'id_product' => $data['id_product']])->get();
         if( count($results) == 0 ):
             return response()->json(formatMessage(400, "No product registration with color variation was found."), 400);
         endif;
 
-        // Rules 
+        // Rules
         $rules = [
             'color_name'      => 'required|min:2|max:60|',
             'color_hexa'      => 'required|min:3|max:9|',
@@ -341,16 +340,15 @@ class ProductController extends Controller
         $dataUpadte = [
             'color_name'    => $data['color_name'],
             'color_hexa'    => $data['color_hexa'],
-        ]; 
-    
+        ];
+
         // Validator
         $validator = Validator::make($dataUpadte , $rules);
 
         if ($validator->fails()) {
-            
             return response()->json(formatMessage(400, $validator->messages()), 400);
         }
-        
+
         try {
             // Update table prod_colors
             DB::table('prod_colors')->where('id', $data['id_prodcolor'] )->update($dataUpadte);
@@ -367,7 +365,7 @@ class ProductController extends Controller
     /**
     * responseDatabaseError checks if there was a database error
     *
-    * @param  $result
+    * @param object $result
     * @return \Illuminate\Http\Response
     */
     private function responseDatabaseError($result) {
@@ -380,7 +378,5 @@ class ProductController extends Controller
             return response()->json(formatMessage(500, 'Something unexpected prevented him from fulfilling the request.'), 500);
         }
     }
-
-
 
 }
